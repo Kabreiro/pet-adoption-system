@@ -74,32 +74,44 @@ app.post("/login", (req, res) => {
 app.get("/menu", (req, res) => {
   if (!req.session.loggedIn) return res.redirect("/");
 
-  const lastAccess = req.cookies.lastAccess || "Primeiro acesso";
+  // Buscar o valor do cookie ou padrão "Primeiro acesso"
+  let lastAccess = req.cookies.lastAccess || "Primeiro acesso";
 
+  // Formatar a data/hora no formato 24h caso exista um valor válido
+  if (lastAccess !== "Primeiro acesso") {
+    const accessDate = new Date(lastAccess);
+    lastAccess = accessDate.toLocaleString("pt-BR", {
+      hour12: false, 
+      timeZone: "America/Sao_Paulo"
+    });
+  }
+
+  // Enviar o HTML com o valor atualizado de lastAccess
   res.send(`
     <html>
       <head>
-      <link rel="stylesheet" href="/css/styles.css">
-      <title>Menu</title>
+        <link rel="stylesheet" href="/css/styles.css">
+        <title>Menu</title>
       </head>
       <body>
-      <div class="menu-container">
-      <h1 class="a">Menu Principal</h1>
-      <p class="a">Último acesso: ${lastAccess}</p>
-      <ul class="menu-list">
-        <li><a href="/interestedForm">Cadastrar Interessado</a></li>
-        <li><a href="/petForm">Cadastrar Pet</a></li>
-        <li><a href="/adoptionForm">Adotar um Pet</a></li>
-        <li><a href="/interestedList" class="list-link">Lista de Interessados</a></li>
-        <li><a href="/petList" class="list-link">Lista de Pets</a></li>
-        <li><a href="/adoptionList" class="list-link">Lista de Adoções</a></li>
-      </ul>
-      <a class="a logout-link" href="/logout">Sair</a>
-    </div>
+        <div class="menu-container">
+          <h1 class="a">Menu Principal</h1>
+          <p class="a">Último acesso: ${lastAccess}</p>
+          <ul class="menu-list">
+            <li><a href="/interestedForm">Cadastrar Interessado</a></li>
+            <li><a href="/petForm">Cadastrar Pet</a></li>
+            <li><a href="/adoptionForm">Adotar um Pet</a></li>
+            <li><a href="/interestedList" class="list-link">Lista de Interessados</a></li>
+            <li><a href="/petList" class="list-link">Lista de Pets</a></li>
+            <li><a href="/adoptionList" class="list-link">Lista de Adoções</a></li>
+          </ul>
+          <a class="a logout-link" href="/logout">Sair</a>
+        </div>
       </body>
     </html>
   `);
 });
+
 
 // Logout
 app.get("/logout", (req, res) => {
