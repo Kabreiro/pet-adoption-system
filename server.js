@@ -80,10 +80,11 @@ app.get("/menu", (req, res) => {
   if (lastAccess !== "Primeiro acesso") {
     const accessDate = new Date(lastAccess);
     lastAccess = accessDate.toLocaleString("pt-BR", {
-      hour12: false,
-      timeZone: "America/Sao_Paulo"
+      hour12: false, // Força o formato 24 horas
+      timeZone: "America/Sao_Paulo" // Garante o fuso horário correto
     });
   }
+  
 
   // Atualizar o cookie com a data/hora atual
   const currentDate = new Date();
