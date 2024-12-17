@@ -1,0 +1,23 @@
+{
+    "name": "pet-adoption-system",
+    "version": "1.0.0",
+    "description": "Sistema de controle de adoção de pets",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "express-session": "^1.17.3",
+      "cookie-parser": "^1.4.6",
+      "fs": "0.0.1-security",
+      "path": "^0.12.7"
+    },
+    "devDependencies": {},
+    "engines": {
+      "node": ">=14.0.0"
+    },
+    "author": "HaRd",
+    "license": "ISC"
+  }
+  
