@@ -54,12 +54,21 @@ app.post("/login", (req, res) => {
   // Usuário fixo para autenticação
   if (username === "admin" && password === "1234") {
     req.session.loggedIn = true;
-    res.cookie("lastAccess", new Date().toLocaleString());
+    
+    // Formatar data e hora no padrão brasileiro (24h)
+    const now = new Date();
+    const formattedDate = now.toLocaleString("pt-BR", { 
+      hour12: false, 
+      timeZone: "America/Sao_Paulo" 
+    });
+    
+    res.cookie("lastAccess", formattedDate);
     return res.redirect("/menu");
   }
 
   res.status(401).send("Usuário ou senha inválidos! <a href='/'>Tentar novamente</a>");
 });
+
 
 // Página do Menu
 app.get("/menu", (req, res) => {
