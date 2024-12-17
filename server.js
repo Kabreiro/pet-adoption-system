@@ -70,21 +70,27 @@ app.post("/login", (req, res) => {
 });
 
 
-// Página do Menu
 app.get("/menu", (req, res) => {
   if (!req.session.loggedIn) return res.redirect("/");
 
-  // Buscar o valor do cookie ou padrão "Primeiro acesso"
+  // Buscar o valor do cookie ou definir "Primeiro acesso" como padrão
   let lastAccess = req.cookies.lastAccess || "Primeiro acesso";
 
-  // Formatar a data/hora no formato 24h caso exista um valor válido
+  // Caso o cookie tenha um valor válido, formatar a data/hora
   if (lastAccess !== "Primeiro acesso") {
     const accessDate = new Date(lastAccess);
     lastAccess = accessDate.toLocaleString("pt-BR", {
-      hour12: false, 
+      hour12: false,
       timeZone: "America/Sao_Paulo"
     });
   }
+
+  // Atualizar o cookie com a data/hora atual
+  const currentDate = new Date();
+  res.cookie("lastAccess", currentDate.toISOString(), {
+    httpOnly: true, // Protege o cookie contra acesso do cliente (recomendado)
+    sameSite: "strict" // Evita envio em requisições cross-site
+  });
 
   // Enviar o HTML com o valor atualizado de lastAccess
   res.send(`
@@ -111,6 +117,7 @@ app.get("/menu", (req, res) => {
     </html>
   `);
 });
+
 
 
 // Logout
